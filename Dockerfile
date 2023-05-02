@@ -15,10 +15,18 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring curl
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=2.2.6
 
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+
 # Copy the Laravel application code to the container
 COPY . .
 
-# Expose port 9000 and start Laravel project
+# Install dependencies
+RUN npm install
+CMD ["npm", "run", "build"]
+
+# Expose port 8000 and start Laravel project
 CMD ["php", "euprava-mup/artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
 
 # Set environment variables for database connection
