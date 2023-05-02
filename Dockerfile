@@ -33,6 +33,7 @@ CMD ["php", "euprava-mup/artisan", "serve", "--host", "0.0.0.0", "--port", "8000
 ENV DB_CONNECTION=mysql
 ENV DB_HOST=euprava_mup_db
 ENV DB_PORT=3306
-ENV DB_DATABASE=euprava-mup
+ENV DB_DATABASE=euprava_mup
 ENV DB_USERNAME=root
 ENV DB_PASSWORD=root
+
