@@ -21,18 +21,7 @@ return new class extends Migration
             $table->integer('max_speed');
             $table->integer('num_of_seats');
             $table->integer('weight');
-            $table->enum('vehicle_type', [
-                'PUTNICKO_VOZILO',
-                'TERETNO_VOZILO',
-                'AUTOBUS',
-                'KAMION',
-                'MOTORNI_BICIKL',
-                'SKUTER',
-                'MOTORNO_TRICIKLO',
-                'MOTORNO_CETVOROCIKLO',
-                'PRIKLJUCNO_VOZILO',
-                'SPECIJALNO_VOZILO'
-            ]);
+            $table->string('vehicle_type');
             $table->string('user_id');
             $table->timestamps();
         });

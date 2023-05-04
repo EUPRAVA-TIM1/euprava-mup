@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
@@ -17,11 +16,11 @@ class AuthController extends Controller
         ])->get('http://' . $ssoHost . ':' . $ssoPort . '/sso/Whoami');
 
         if ($response->status() == 200) {
-            // Successful request
             $data = $response->json();
+            session(['token' => $token]);
+            session(['user' => $data]);
             return true;
         } else {
-            // Failed request
             $errorMessage = $response->body();
             return false;
         }

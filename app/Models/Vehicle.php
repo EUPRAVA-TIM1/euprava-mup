@@ -17,5 +17,5 @@ class Vehicle extends Model
     public $incrementing = false;
     protected $table = "vehicles";
     protected $fillable = ['brand', 'model', 'year', 'color', 'engine_power', 'max_speed', 'num_of_seats', 'weight',
-        'vehicleType', 'userId'];
+        'vehicle_type', 'user_id'];
 }

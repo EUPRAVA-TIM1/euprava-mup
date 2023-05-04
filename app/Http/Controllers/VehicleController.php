@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VehicleType;
 use App\Models\Vehicle;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,15 +14,17 @@ use Illuminate\Http\Request;
 class VehicleController extends Controller
 {
     public function vehicleRegistrationRequest(Request $request):
-    Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        //$authController = new AuthController();
-        //$isValidToken = $authController->validateToken($token);
-        //if ($isValidToken) {
+        $token = session()->pull('token', '');
+        $user = session()->pull('user', '');
+        $authController = new AuthController();
+        $isValidToken = $authController->validateToken($token);
+        if ($isValidToken) {
 
             $newVehicleRegistrationRequest = new Vehicle();
 
-            $newVehicleRegistrationRequest->user_id = "1311001223445";
+            $newVehicleRegistrationRequest->user_id = $user['jmbg'];
 
             $newVehicleRegistrationRequest->fill([
                 'brand' => $request->brand,
@@ -38,19 +41,20 @@ class VehicleController extends Controller
             $newVehicleRegistrationRequest->save();
 
             return view('index');
-        //} else {
-          //  return view ('authorization_failed');
-        //}
+        } else {
+            return view ('authorization_failed');
+        }
     }
 
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        //$authController = new AuthController();
-        //$isValidToken = $authController->validateToken($token);
-        //if ($isValidToken) {
+        $token = session()->pull('token', '');
+        $authController = new AuthController();
+        $isValidToken = $authController->validateToken($token);
+        if ($isValidToken) {
             return view('vehicleRegistrationRequests', ['vehicleRegistrationRequests' => Vehicle::all()]);
-        //} else {
-         //   return view ('authorization_failed');
-        //}
+        } else {
+            return view ('authorization_failed');
+        }
     }
 }

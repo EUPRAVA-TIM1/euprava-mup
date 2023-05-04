@@ -1,7 +1,7 @@
 FROM php:8.2-fpm
 
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /euprava-mup/euprava-mup
 
 # Install dependencies
 RUN apt-get update && \
@@ -22,12 +22,8 @@ RUN apt-get install -y nodejs
 # Copy the Laravel application code to the container
 COPY . .
 
-# Install dependencies
-RUN npm install
-CMD ["npm", "run", "build"]
-
-# Expose port 8000 and start Laravel project
-CMD ["php", "euprava-mup/artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
+# Start Laravel project
+CMD bash -c "composer install && npm install && npm run dev & php artisan serve --host 0.0.0.0 --port 3003"
 
 # Set environment variables for database connection
 ENV DB_CONNECTION=mysql
@@ -36,4 +32,5 @@ ENV DB_PORT=3306
 ENV DB_DATABASE=euprava_mup
 ENV DB_USERNAME=root
 ENV DB_PASSWORD=root
-
+ENV VITE_SERVER_HOST=0.0.0.0
+ENV VITE_SERVER_PORT=5173

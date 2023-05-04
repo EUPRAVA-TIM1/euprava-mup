@@ -1,4 +1,4 @@
-create database if not exists euprava_mup
+create database if not exists `euprava_mup`
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_0900_ai_ci;
 SET NAMES utf8mb4;
@@ -14,18 +14,7 @@ CREATE TABLE if not exists vehicles (
     max_speed INT NOT NULL,
     num_of_seats INT NOT NULL,
     weight INT NOT NULL,
-    vehicle_type ENUM(
-        'PUTNICKO_VOZILO',
-        'TERETNO_VOZILO',
-        'AUTOBUS',
-        'KAMION',
-        'MOTORNI_BICIKL',
-        'SKUTER',
-        'MOTORNO_TRICIKLO',
-        'MOTORNO_CETVOROCIKLO',
-        'PRIKLJUCNO_VOZILO',
-        'SPECIJALNO_VOZILO'
-    ) NOT NULL,
+    vehicle_type VARCHAR(255) NOT NULL,
     user_id VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
