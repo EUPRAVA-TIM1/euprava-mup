@@ -13,7 +13,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    @vite(['resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('bootstrap5/css/bootstrap.min.css') }}">
+    <script src="{{ asset('bootstrap5/js/bootstrap.min.js') }}"></script>
 
 </head>
 <body>
@@ -61,7 +62,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title fs-4">
-                                            Podnošenje zahteva za registraciju vozila:
+                                            Zahtev za registraciju novog vozila:
                                         </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>

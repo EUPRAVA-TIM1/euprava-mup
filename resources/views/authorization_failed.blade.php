@@ -13,7 +13,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    @vite(['resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('bootstrap5/css/bootstrap.min.css') }}">
+    <script src="{{ asset('bootstrap5/js/bootstrap.min.js') }}"></script>
 
 </head>
 <body>
