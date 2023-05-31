@@ -23,19 +23,21 @@ class VehicleController extends Controller
 
             $newVehicleRegistrationRequest = new Vehicle();
 
-            $newVehicleRegistrationRequest->user_id = $user['jmbg'];
-
             $newVehicleRegistrationRequest->fill([
-                'brand' => $request->brand,
+                'marka' => $request->brand,
                 'model' => $request->model,
-                'year' => $request->year,
-                'color' => $request->color,
-                'engine_power' => $request->engine_power,
-                'max_speed' => $request->max_speed,
-                'num_of_seats' => $request->num_of_seats,
-                'weight' => $request->weight,
-                'vehicle_type' => $request->vehicle_type,
-                'is_approved' => false
+                'godina' => $request->year,
+                'boja' => $request->color,
+                'regBroj' => $request->registration_number,
+                'snagaMotora' => $request->engine_power,
+                'maksimalnaBrzina' => $request->max_speed,
+                'brojSedista' => $request->num_of_seats,
+                'tezina' => $request->weight,
+                'tipVozila' => $request->vehicle_type,
+                'statusRegistracije' => "NA_CEKANJU",
+                'prijavljenaKradja' => null,
+                'odobrioSluzbenik' => null,
+                'korisnik' => $user['jmbg']
             ]);
 
             $newVehicleRegistrationRequest->save();
@@ -66,7 +68,8 @@ class VehicleController extends Controller
         $isValidToken = $authController->validateToken($token);
 
         if ($isValidToken) {
-            $vehicleRegistrationRequests = Vehicle::where('is_approved', false)->get();
+            $vehicleRegistrationRequests = Vehicle::whereNull('odobrioSluzbenik')->orWhere('odobrioSluzbenik', '')
+                ->get();
             return view('vehicle_registration_requests',
                 ['vehicleRegistrationRequests' => $vehicleRegistrationRequests]);
         } else {
@@ -74,23 +77,33 @@ class VehicleController extends Controller
         }
     }
 
-    public function approveVehicleRegistrationRequest($id):
+    public function manageVehicleRegistrationRequest(Request $request, $id):
     View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
+        $action = $request->input('action', '');
+
         $token = session()->pull('token', '');
         $authController = new AuthController();
         $isValidToken = $authController->validateToken($token);
+        $user = session()->pull('user', '');
 
         if ($isValidToken) {
             $vehicle = Vehicle::find($id);
             if ($vehicle) {
-                $vehicle->is_approved = true;
+                $vehicle->odobrioSluzbenik = $user['jmbg'];
+
+                if ($action === 'approve') {
+                    $vehicle->statusRegistracije = "ODOBRENA";
+                } elseif ($action === 'reject') {
+                    $vehicle->statusRegistracije = "ODBIJENA";
+                }
+
                 $vehicle->save();
 
                 return view('vehicle_registration_requests',
-                    ['vehicleRegistrationRequests' => Vehicle::where('is_approved', false)->get()]);
+                    ['vehicleRegistrationRequests' => Vehicle::whereNull('odobrioSluzbenik')->
+                        orWhere('odobrioSluzbenik', '')->get()]);
             } else {
-                // Handle the case where the specified ID does not exist
                 return view('error');
             }
         } else {
@@ -107,10 +120,21 @@ class VehicleController extends Controller
 
     public function findByUserId($jmbg): JsonResponse
     {
-        $vehicle = Vehicle::where('user_id', $jmbg)->first();
+        $vehicle = Vehicle::where('korisnik', $jmbg)->first();
 
         if (!$vehicle) {
-            return response()->json(['error' => 'Vehicle not found'], 404);
+            return response()->json(['error' => 'Vozilo nije pronadjeno!'], 404);
+        }
+
+        return response()->json($vehicle);
+    }
+
+    public function findByVehicleRegNum($regBroj): JsonResponse
+    {
+        $vehicle = Vehicle::where('regBroj', $regBroj)->first();
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vozilo nije pronadjeno!'], 404);
         }
 
         return response()->json($vehicle);

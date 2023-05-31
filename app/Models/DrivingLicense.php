@@ -8,13 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static where(string $string, $jmbg)
+ * @method static whereNull(string $string)
+ * @method static find($id)
  */
 class DrivingLicense extends Model
 {
     use HasFactory, HasUuids;
 
     public $incrementing = false;
-    protected $table = "driving_licenses";
-    protected $fillable = ['driver_license_num', 'categories', 'issue_date', 'expiry_date', 'penalty_points', 'status',
-        'official_id', 'user_id'];
+    protected $table = "vozackaDozvola";
+    protected $fillable = ['brojVozackeDozvole', 'katergorijeVozila', 'datumIzdavanja', 'datumIsteka',
+        'brojKaznenihPoena', 'statusVozackeDozvole', 'odobrioSluzbenik', 'korisnik'];
+
 }

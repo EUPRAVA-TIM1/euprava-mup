@@ -13,16 +13,16 @@ class CreateDrivingLicensesTable extends Migration
      */
     public function up()
     {
-        Schema::create('driving_licenses', function (Blueprint $table) {
+        Schema::create('vozackaDozvola', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->char('driver_license_num', 8);
-            $table->string('categories');
-            $table->date('issue_date')->nullable();
-            $table->date('expiry_date')->nullable();
-            $table->integer('penalty_points');
-            $table->string('status');
-            $table->string('official_id', 13)->nullable();
-            $table->string('user_id', 13)->unique();
+            $table->char('brojVozackeDozvole', 8);
+            $table->string('katergorijeVozila');
+            $table->date('datumIzdavanja')->nullable();
+            $table->date('datumIsteka')->nullable();
+            $table->integer('brojKaznenihPoena');
+            $table->string('statusVozackeDozvole');
+            $table->string('odobrioSluzbenik', 13)->nullable();
+            $table->string('korisnik', 13)->unique();
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ class CreateDrivingLicensesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('driving_licenses');
+        Schema::dropIfExists('vozackaDozvola');
     }
 }

@@ -11,19 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
+        Schema::create('vozilo', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('brand');
+            $table->string('marka');
             $table->string('model');
-            $table->integer('year');
-            $table->string('color');
-            $table->integer('engine_power');
-            $table->integer('max_speed');
-            $table->integer('num_of_seats');
-            $table->integer('weight');
-            $table->string('vehicle_type');
-            $table->string('user_id', 13);
-            $table->boolean('is_approved');
+            $table->integer('godina');
+            $table->string('boja');
+            $table->string('regBroj');
+            $table->integer('snagaMotora');
+            $table->integer('maksimalnaBrzina');
+            $table->integer('brojSedista');
+            $table->integer('tezina');
+            $table->string('tipVozila');
+            $table->string('statusRegistracije');
+            $table->dateTime('prijavljenaKradja')->nullable();
+            $table->string('odobrioSluzbenik', 13)->nullable();
+            $table->string('korisnik', 13);
             $table->timestamps();
         });
     }
@@ -33,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::dropIfExists('vozilo');
     }
 };

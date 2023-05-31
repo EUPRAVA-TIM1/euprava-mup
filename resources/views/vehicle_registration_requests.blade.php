@@ -26,9 +26,10 @@
                 <th scope="col">Model</th>
                 <th scope="col">Godina proizvodnje</th>
                 <th scope="col">Boja</th>
+                <th scope="col">Registarski broj</th>
                 <th scope="col">Snaga motora</th>
-                <th scope="col">Maksimalna brzina</th>
                 <th scope="col">Broj sedišta</th>
+                <th scope="col">Maksimalna brzina</th>
                 <th scope="col">Težina</th>
                 <th scope="col">Tip vozila</th>
                 <th scope="col">ID korisnika</th>
@@ -38,22 +39,27 @@
             <tbody>
             @foreach ($vehicleRegistrationRequests as $vehicleRegistrationRequest)
                 <tr>
-                    <td>{{ $vehicleRegistrationRequest->brand }}</td>
+                    <td>{{ $vehicleRegistrationRequest->marka }}</td>
                     <td>{{ $vehicleRegistrationRequest->model }}</td>
-                    <td>{{ $vehicleRegistrationRequest->year }}</td>
-                    <td>{{ $vehicleRegistrationRequest->color }}</td>
-                    <td>{{ $vehicleRegistrationRequest->engine_power }}</td>
-                    <td>{{ $vehicleRegistrationRequest->max_speed }}</td>
-                    <td>{{ $vehicleRegistrationRequest->num_of_seats }}</td>
-                    <td>{{ $vehicleRegistrationRequest->weight }}</td>
-                    <td>{{ $vehicleRegistrationRequest->vehicle_type }}</td>
-                    <td>{{ $vehicleRegistrationRequest->user_id }}</td>
+                    <td>{{ $vehicleRegistrationRequest->godina }}</td>
+                    <td>{{ $vehicleRegistrationRequest->boja }}</td>
+                    <td>{{ $vehicleRegistrationRequest->regBroj }}</td>
+                    <td>{{ $vehicleRegistrationRequest->snagaMotora }}</td>
+                    <td>{{ $vehicleRegistrationRequest->brojSedista }}</td>
+                    <td>{{ $vehicleRegistrationRequest->maksimalnaBrzina }}</td>
+                    <td>{{ $vehicleRegistrationRequest->tezina }}</td>
+                    <td>{{ $vehicleRegistrationRequest->tipVozila }}</td>
+                    <td>{{ $vehicleRegistrationRequest->korisnik }}</td>
                     <td>
-                        <form action="{{ route('approveVehicleRegistrationRequest',
+                        <form action="{{ route('manageVehicleRegistrationRequest',
                             ['id' => $vehicleRegistrationRequest->id]) }}" method="POST">
                             @csrf
-                            <button class="btn btn-danger btn-sm" style="font-size: 8pt" type="submit">Approve
-                            </button>
+                            <div class="d-flex justify-content-start">
+                                <button class="btn btn-danger btn-sm me-2" value="reject" name="action"
+                                        type="submit">Odobri</button>
+                                <button class="btn btn-secondary btn-sm" value="reject" name="action"
+                                        type="submit">Odbij</button>
+                            </div>
                         </form>
                     </td>
                 </tr>

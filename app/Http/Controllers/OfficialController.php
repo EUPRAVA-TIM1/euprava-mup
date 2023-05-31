@@ -10,14 +10,14 @@ class OfficialController extends Controller
 {
     public function store(): JsonResponse
     {
-        $official = new Official();
-        $official->official_id = "3109975763002";
+        $sluzbenik = new Official();
+        $sluzbenik ->sluzbenik = "3109975763002";
 
-        $official->save();
+        $sluzbenik->save();
 
         return response()->json([
-            'message' => "Officials successfully added!",
-            'data' => $official
+            'message' => "Official je uspesno kreiran",
+            'data' => $sluzbenik
         ], 201);
     }
 
@@ -27,7 +27,7 @@ class OfficialController extends Controller
         $user = session()->pull('user', '');
 
         if ($user && isset($user['jmbg'])) {
-            return Official::where('official_id', $user['jmbg'])->exists();
+            return Official::where('sluzbenik', $user['jmbg'])->exists();
         }
 
         return false;

@@ -14,6 +14,6 @@ class Official extends Model
     use HasFactory, HasUuids;
 
     public $incrementing = false;
-    protected $table = "officials";
-    protected $fillable = ['official_id'];
+    protected $table = "sluzbenik";
+    protected $fillable = ['sluzbenik'];
 }

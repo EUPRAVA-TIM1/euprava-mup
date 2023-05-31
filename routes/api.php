@@ -27,12 +27,13 @@ Route::group(['prefix' => 'officials'], function () {
 
 Route::group(['prefix' => 'vehicles'], function () {
     Route::get('/', [VehicleController::class, 'index'])->name('index');
-    Route::get('/{jmbg}', [VehicleController::class, 'findByUserId'])->name('findByUserId');
+    Route::get('/{regBroj}', [VehicleController::class, 'findByVehicleRegNum'])->name('findByVehicleRegNum');
 });
 
 Route::group(['prefix' => 'driving_licenses'], function () {
     Route::get('/', [DrivingLicenseController::class, 'index'])->name('index');
     Route::get('/{jmbg}', [DrivingLicenseController::class, 'findByUserId'])->name('findByUserId');
+    Route::post('/{jmbg}', [DrivingLicenseController::class, 'removePenaltyPoints'])->name('removePenaltyPoints');
 });
 
 

@@ -35,7 +35,12 @@
                                name="color" required>
                     </div>
                     <div class="form-group mb-2 mx-1">
-                        <label for="engine_power">Snaga motora:</label>
+                        <label for="registration_number">Registarski broj:</label>
+                        <input type="text" class="form-control text-center mt-2" id="registration_number"
+                               name="registration_number" maxlength="7" required>
+                    </div>
+                    <div class="form-group mb-2 mx-1">
+                        <label for="engine_power">Snaga motora (kw):</label>
                         <input type="number" class="form-control text-center mt-2"
                                id="engine_power" name="engine_power" min="1" max="10000"
                                required>

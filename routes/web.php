@@ -40,6 +40,11 @@ Route::get('/official/{token}', function ($token) {
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::post('/approveVehicleRegistrationRequest/{id}', [VehicleController::class,
-    'approveVehicleRegistrationRequest'])->name('approveVehicleRegistrationRequest');
+Route::post('/manageVehicleRegistrationRequest/{id}', [VehicleController::class,
+    'manageVehicleRegistrationRequest'])->name('manageVehicleRegistrationRequest');
 
+Route::get('/getDriverLicenseRequests', [DrivingLicenseController::class, 'getPendingDriverLicenseRequests'])
+    ->name('getPendingDriverLicenseRequests');
+
+Route::post('/manageDrivingLicenseRequest/{id}', [DrivingLicenseController::class, 'manageDrivingLicenseRequest'])
+    ->name('manageDrivingLicenseRequest');
