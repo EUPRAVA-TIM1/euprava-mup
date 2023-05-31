@@ -33,7 +33,7 @@ Route::group(['prefix' => 'vehicles'], function () {
 Route::group(['prefix' => 'driving_licenses'], function () {
     Route::get('/', [DrivingLicenseController::class, 'index'])->name('index');
     Route::get('/{jmbg}', [DrivingLicenseController::class, 'findByUserId'])->name('findByUserId');
-    Route::post('/{jmbg}', [DrivingLicenseController::class, 'removePenaltyPoints'])->name('removePenaltyPoints');
+    Route::put('/{jmbg}', [DrivingLicenseController::class, 'removePenaltyPoints'])->name('removePenaltyPoints');
 });
 
 
