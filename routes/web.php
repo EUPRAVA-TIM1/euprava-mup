@@ -1,25 +1,45 @@
 <?php
 
-//use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DrivingLicenseController;
+use App\Http\Controllers\OfficialController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/vehicleRegistrationRequest', [VehicleController::class, 'vehicleRegistrationRequest'])->
     name('vehicleRegistrationRequest');
 
-Route::get('/getVehicleRegistrationRequests', [VehicleController::class, 'index'])->name('index');
-//Auth::routes();
+Route::post('/driverLicenseRequest', [DrivingLicenseController::class, 'driverLicenseRequest'])->
+    name('driverLicenseRequest');
+
+Route::get('/getVehicleRegistrationRequests', [VehicleController::class, 'getPendingVehicleRegistrationRequests'])
+    ->name('getPendingVehicleRegistrationRequests');
 
 Route::get('/redirekcija/{token}', function ($token) {
     $authController = new AuthController();
+    $officialController = new OfficialController();
     $isValidToken = $authController->validateToken($token);
     if ($isValidToken) {
-        return view('index');
+        return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token]);
     } else {
         return view ('authorization_failed');
     }
 });
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/official/{token}', function ($token) {
+    $authController = new AuthController();
+    $officialController = new OfficialController();
+    $isValidToken = $authController->validateToken($token);
+    if($isValidToken && $officialController->isOfficial()) {
+        return view('official_index', ['isOfficial' => true, 'token' => $token]);
+    } else {
+        return view ('authorization_failed');
+    }
+});
+
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+Route::post('/approveVehicleRegistrationRequest/{id}', [VehicleController::class,
+    'approveVehicleRegistrationRequest'])->name('approveVehicleRegistrationRequest');
+

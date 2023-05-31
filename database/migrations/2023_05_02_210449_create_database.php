@@ -7,11 +7,11 @@ return new class extends Migration
 {
     public function up()
     {
-        DB::statement('CREATE DATABASE euprava_mup');
+       // DB::statement('CREATE DATABASE euprava_mup');
     }
 
     public function down()
     {
-        DB::statement('DROP DATABASE euprava_mup');
+       // DB::statement('DROP DATABASE euprava_mup');
     }
 };

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\VehicleType;
 use App\Models\Vehicle;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class VehicleController extends Controller
@@ -17,9 +15,10 @@ class VehicleController extends Controller
     View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $token = session()->pull('token', '');
-        $user = session()->pull('user', '');
         $authController = new AuthController();
+        $officialController = new OfficialController();
         $isValidToken = $authController->validateToken($token);
+        $user = session()->pull('user', '');
         if ($isValidToken) {
 
             $newVehicleRegistrationRequest = new Vehicle();
@@ -36,25 +35,84 @@ class VehicleController extends Controller
                 'num_of_seats' => $request->num_of_seats,
                 'weight' => $request->weight,
                 'vehicle_type' => $request->vehicle_type,
+                'is_approved' => false
             ]);
 
             $newVehicleRegistrationRequest->save();
 
-            return view('index');
+            return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token]);
         } else {
             return view ('authorization_failed');
         }
     }
 
-    public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    /*public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $token = session()->pull('token', '');
         $authController = new AuthController();
         $isValidToken = $authController->validateToken($token);
         if ($isValidToken) {
-            return view('vehicleRegistrationRequests', ['vehicleRegistrationRequests' => Vehicle::all()]);
+            return view('vehicle_registration_requests', ['vehicleRegistrationRequests' => Vehicle::all()]);
         } else {
             return view ('authorization_failed');
         }
+    }*/
+
+    public function getPendingVehicleRegistrationRequests():
+    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $token = session()->pull('token', '');
+        $authController = new AuthController();
+        $isValidToken = $authController->validateToken($token);
+
+        if ($isValidToken) {
+            $vehicleRegistrationRequests = Vehicle::where('is_approved', false)->get();
+            return view('vehicle_registration_requests',
+                ['vehicleRegistrationRequests' => $vehicleRegistrationRequests]);
+        } else {
+            return view('authorization_failed');
+        }
+    }
+
+    public function approveVehicleRegistrationRequest($id):
+    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $token = session()->pull('token', '');
+        $authController = new AuthController();
+        $isValidToken = $authController->validateToken($token);
+
+        if ($isValidToken) {
+            $vehicle = Vehicle::find($id);
+            if ($vehicle) {
+                $vehicle->is_approved = true;
+                $vehicle->save();
+
+                return view('vehicle_registration_requests',
+                    ['vehicleRegistrationRequests' => Vehicle::where('is_approved', false)->get()]);
+            } else {
+                // Handle the case where the specified ID does not exist
+                return view('error');
+            }
+        } else {
+            return view('authorization_failed');
+        }
+    }
+
+    public function index(): JsonResponse
+    {
+        $vehicles = Vehicle::all();
+
+        return response()->json($vehicles);
+    }
+
+    public function findByUserId($jmbg): JsonResponse
+    {
+        $vehicle = Vehicle::where('user_id', $jmbg)->first();
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vehicle not found'], 404);
+        }
+
+        return response()->json($vehicle);
     }
 }

@@ -22,7 +22,8 @@ return new class extends Migration
             $table->integer('num_of_seats');
             $table->integer('weight');
             $table->string('vehicle_type');
-            $table->string('user_id');
+            $table->string('user_id', 13);
+            $table->boolean('is_approved');
             $table->timestamps();
         });
     }

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string $vehicleType
+ * @method static where(string $string, false $false)
+ * @method static find($id)
  */
 class Vehicle extends Model
 {
@@ -17,5 +19,5 @@ class Vehicle extends Model
     public $incrementing = false;
     protected $table = "vehicles";
     protected $fillable = ['brand', 'model', 'year', 'color', 'engine_power', 'max_speed', 'num_of_seats', 'weight',
-        'vehicle_type', 'user_id'];
+        'vehicle_type', 'user_id', 'is_approved'];
 }

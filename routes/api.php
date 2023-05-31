@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DrivingLicenseController;
+use App\Http\Controllers\OfficialController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +20,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['prefix' => 'officials'], function () {
+    Route::post('/', [OfficialController::class, 'store'])->name('store');
+});
+
+Route::group(['prefix' => 'vehicles'], function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('index');
+    Route::get('/{jmbg}', [VehicleController::class, 'findByUserId'])->name('findByUserId');
+});
+
+Route::group(['prefix' => 'driving_licenses'], function () {
+    Route::get('/', [DrivingLicenseController::class, 'index'])->name('index');
+    Route::get('/{jmbg}', [DrivingLicenseController::class, 'findByUserId'])->name('findByUserId');
+});
+
+

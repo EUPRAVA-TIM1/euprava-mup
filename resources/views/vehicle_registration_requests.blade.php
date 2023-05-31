@@ -32,6 +32,7 @@
                 <th scope="col">Težina</th>
                 <th scope="col">Tip vozila</th>
                 <th scope="col">ID korisnika</th>
+                <th scope="col">Akcije</th>
             </tr>
             </thead>
             <tbody>
@@ -47,6 +48,14 @@
                     <td>{{ $vehicleRegistrationRequest->weight }}</td>
                     <td>{{ $vehicleRegistrationRequest->vehicle_type }}</td>
                     <td>{{ $vehicleRegistrationRequest->user_id }}</td>
+                    <td>
+                        <form action="{{ route('approveVehicleRegistrationRequest',
+                            ['id' => $vehicleRegistrationRequest->id]) }}" method="POST">
+                            @csrf
+                            <button class="btn btn-danger btn-sm" style="font-size: 8pt" type="submit">Approve
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
             </tbody>
