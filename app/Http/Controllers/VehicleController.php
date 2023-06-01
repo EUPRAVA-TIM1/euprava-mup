@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DrivingLicense;
 use App\Models\Vehicle;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class VehicleController extends Controller
 {
@@ -17,7 +20,10 @@ class VehicleController extends Controller
         $token = session()->pull('token', '');
         $authController = new AuthController();
         $officialController = new OfficialController();
+        $drivingLicenseController = new DrivingLicenseController();
+
         $isValidToken = $authController->validateToken($token);
+
         $user = session()->pull('user', '');
         if ($isValidToken) {
 
@@ -42,7 +48,8 @@ class VehicleController extends Controller
 
             $newVehicleRegistrationRequest->save();
 
-            return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token]);
+            return view('index', ['isOfficial' => $officialController->isOfficial(),
+                'token' => $token, 'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
         } else {
             return view ('authorization_failed');
         }
@@ -71,7 +78,7 @@ class VehicleController extends Controller
             $vehicleRegistrationRequests = Vehicle::whereNull('odobrioSluzbenik')->orWhere('odobrioSluzbenik', '')
                 ->get();
             return view('vehicle_registration_requests',
-                ['vehicleRegistrationRequests' => $vehicleRegistrationRequests]);
+                ['vehiclesRegistration' => $vehicleRegistrationRequests, 'isOfficial' => true]);
         } else {
             return view('authorization_failed');
         }
@@ -101,8 +108,8 @@ class VehicleController extends Controller
                 $vehicle->save();
 
                 return view('vehicle_registration_requests',
-                    ['vehicleRegistrationRequests' => Vehicle::whereNull('odobrioSluzbenik')->
-                        orWhere('odobrioSluzbenik', '')->get()]);
+                    ['vehiclesRegistration' => Vehicle::whereNull('odobrioSluzbenik')->
+                        orWhere('odobrioSluzbenik', '')->get(), 'isOfficial' => true]);
             } else {
                 return view('error');
             }
@@ -118,15 +125,26 @@ class VehicleController extends Controller
         return response()->json($vehicles);
     }
 
-    public function findByUserId($jmbg): JsonResponse
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function findByUserId():
+    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $vehicle = Vehicle::where('korisnik', $jmbg)->first();
 
-        if (!$vehicle) {
-            return response()->json(['error' => 'Vozilo nije pronadjeno!'], 404);
+        $token = session()->pull('token', '');
+        $authController = new AuthController();
+        $isValidToken = $authController->validateToken($token);
+        $user = session()->get('user', '');
+
+        if ($isValidToken) {
+            $vehicles = Vehicle::where('korisnik', $user['jmbg'])->get();
+            return view('vehicle_registration_requests',
+                ['vehiclesRegistration' => $vehicles, 'isOfficial' => false]);
+        } else {
+            return view('authorization_failed');
         }
-
-        return response()->json($vehicle);
     }
 
     public function findByVehicleRegNum($regBroj): JsonResponse

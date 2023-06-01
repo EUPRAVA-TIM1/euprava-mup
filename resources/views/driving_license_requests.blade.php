@@ -51,7 +51,7 @@
                             ['id' => $driverLicenseRequest->id]) }}" method="POST">
                         @csrf
                         <div class="d-flex justify-content-start">
-                            <button class="btn btn-danger btn-sm" value="approve" name="action" style="font-size: 8pt"
+                            <button class="btn btn-danger btn-sm me-2" value="approve" name="action" style="font-size: 8pt"
                                     type="submit">
                                 Odobri</button>
                             <button class="btn btn-secondary btn-sm" value="reject" name="action" style="font-size: 8pt"

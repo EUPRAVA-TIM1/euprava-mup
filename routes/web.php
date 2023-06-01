@@ -19,9 +19,14 @@ Route::get('/getVehicleRegistrationRequests', [VehicleController::class, 'getPen
 Route::get('/redirekcija/{token}', function ($token) {
     $authController = new AuthController();
     $officialController = new OfficialController();
+    $drivingLicenseController = new DrivingLicenseController();
+
     $isValidToken = $authController->validateToken($token);
+    $user = session()->get('user', '');
+
     if ($isValidToken) {
-        return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token]);
+        return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
+            'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
     } else {
         return view ('authorization_failed');
     }
@@ -48,3 +53,5 @@ Route::get('/getDriverLicenseRequests', [DrivingLicenseController::class, 'getPe
 
 Route::post('/manageDrivingLicenseRequest/{id}', [DrivingLicenseController::class, 'manageDrivingLicenseRequest'])
     ->name('manageDrivingLicenseRequest');
+
+Route::get('/myVehicles', [VehicleController::class, 'findByUserId'])->name('findByUserId');

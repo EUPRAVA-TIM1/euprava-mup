@@ -26,7 +26,6 @@
                                 <button class="btn btn-danger fs-5" style="background-color: #EF5350;">
                                     Prikaži zahteve za vozačku dozvolu</button>
                             </a>
-
                         </div>
                     </div>
                 </div>

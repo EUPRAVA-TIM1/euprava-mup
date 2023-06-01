@@ -22,8 +22,12 @@
                         <h5 class="card-title fs-2">Informacije o vozačkoj dozvoli</h5>
                         <p class="card-text fs-5"> Ovde možete pogledati sve informacije vezano za vašu vozačku
                             dozvolu</p>
-                        <button class="btn btn-danger fs-5" style="background-color: #EF5350;">
+                        <button data-bs-toggle="modal" data-bs-target="#getDrivingLicenseDataModal"
+                                class="btn btn-danger fs-5" style="background-color: #EF5350;">
                             Prikaži informacije o vozačkoj dozvoli</button>
+                        @component('get_driving_license_data_modal', ['drivingLicenseData' => $drivingLicenseData->getData()])
+                        @endcomponent
+
                     </div>
                 </div>
             </div>
@@ -45,8 +49,10 @@
                     <div class="card-body">
                         <h5 class="card-title fs-2">Informacije o mojim vozilima</h5>
                         <p class="card-text fs-5">Ovde možete pogledati sve dostpune informacije vezane za vaša vozila</p>
-                        <a href="#" class="btn btn-danger fs-5" style="background-color: #EF5350;">
-                            Prikaži informacije o mojim vozilima</a>
+                        <a class="btn btn-outline-light mx-1" href="/myVehicles">
+                            <button class="btn btn-danger fs-5" style="background-color: #EF5350;">
+                                Prikaži informacije o mojim vozilima</button>
+                        </a>
                     </div>
                 </div>
             </div>

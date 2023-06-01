@@ -19,6 +19,8 @@ class DrivingLicenseController extends Controller
         $token = session()->pull('token', '');
         $authController = new AuthController();
         $officialController = new OfficialController();
+        $drivingLicenseController = new DrivingLicenseController();
+
         $isValidToken = $authController->validateToken($token);
         $user = session()->pull('user', '');
         if ($isValidToken) {
@@ -41,7 +43,8 @@ class DrivingLicenseController extends Controller
 
                     $newDrivingLicenseRequest->save();
 
-                    return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token]);
+                    return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
+                        'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
                 }
             } else {
                 return view('error');
@@ -121,6 +124,8 @@ class DrivingLicenseController extends Controller
     }
 
     public function removePenaltyPoints(Request $request, $jmbg){
+
+        //TODO Add auth
 
         $drivingLicense = DrivingLicense::where("korisnik", $jmbg)->first();
 

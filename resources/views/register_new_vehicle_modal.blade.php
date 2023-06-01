@@ -37,7 +37,7 @@
                     <div class="form-group mb-2 mx-1">
                         <label for="registration_number">Registarski broj:</label>
                         <input type="text" class="form-control text-center mt-2" id="registration_number"
-                               name="registration_number" maxlength="7" required>
+                               name="registration_number" maxlength="8" required>
                     </div>
                     <div class="form-group mb-2 mx-1">
                         <label for="engine_power">Snaga motora (kw):</label>

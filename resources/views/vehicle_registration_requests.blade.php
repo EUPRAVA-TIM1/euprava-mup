@@ -32,36 +32,48 @@
                 <th scope="col">Maksimalna brzina</th>
                 <th scope="col">Težina</th>
                 <th scope="col">Tip vozila</th>
-                <th scope="col">ID korisnika</th>
-                <th scope="col">Akcije</th>
+                @if($isOfficial)
+                    <th scope="col">ID korisnika</th>
+                    <th scope="col">Akcije</th>
+                @else
+                    <th scope="col">Status registracije</th>
+                    <th scope="col">Prijavljena krađa</th>
+                    <th scope="col">Odobrio službenik</th>
+                @endif
             </tr>
             </thead>
             <tbody>
-            @foreach ($vehicleRegistrationRequests as $vehicleRegistrationRequest)
+            @foreach ($vehiclesRegistration as $vehicleRegistration)
                 <tr>
-                    <td>{{ $vehicleRegistrationRequest->marka }}</td>
-                    <td>{{ $vehicleRegistrationRequest->model }}</td>
-                    <td>{{ $vehicleRegistrationRequest->godina }}</td>
-                    <td>{{ $vehicleRegistrationRequest->boja }}</td>
-                    <td>{{ $vehicleRegistrationRequest->regBroj }}</td>
-                    <td>{{ $vehicleRegistrationRequest->snagaMotora }}</td>
-                    <td>{{ $vehicleRegistrationRequest->brojSedista }}</td>
-                    <td>{{ $vehicleRegistrationRequest->maksimalnaBrzina }}</td>
-                    <td>{{ $vehicleRegistrationRequest->tezina }}</td>
-                    <td>{{ $vehicleRegistrationRequest->tipVozila }}</td>
-                    <td>{{ $vehicleRegistrationRequest->korisnik }}</td>
-                    <td>
-                        <form action="{{ route('manageVehicleRegistrationRequest',
-                            ['id' => $vehicleRegistrationRequest->id]) }}" method="POST">
-                            @csrf
-                            <div class="d-flex justify-content-start">
-                                <button class="btn btn-danger btn-sm me-2" value="reject" name="action"
-                                        type="submit">Odobri</button>
-                                <button class="btn btn-secondary btn-sm" value="reject" name="action"
-                                        type="submit">Odbij</button>
-                            </div>
-                        </form>
-                    </td>
+                    <td>{{ $vehicleRegistration->marka }}</td>
+                    <td>{{ $vehicleRegistration->model }}</td>
+                    <td>{{ $vehicleRegistration->godina }}</td>
+                    <td>{{ $vehicleRegistration->boja }}</td>
+                    <td>{{ $vehicleRegistration->regBroj }}</td>
+                    <td>{{ $vehicleRegistration->snagaMotora }}</td>
+                    <td>{{ $vehicleRegistration->brojSedista }}</td>
+                    <td>{{ $vehicleRegistration->maksimalnaBrzina }}</td>
+                    <td>{{ $vehicleRegistration->tezina }}</td>
+                    <td>{{ $vehicleRegistration->tipVozila }}</td>
+                    @if($isOfficial)
+                        <td>{{ $vehicleRegistration->korisnik }}</td>
+                        <td>
+                            <form action="{{ route('manageVehicleRegistrationRequest',
+                            ['id' => $vehicleRegistration->id]) }}" method="POST">
+                                @csrf
+                                <div class="d-flex justify-content-start">
+                                    <button class="btn btn-danger btn-sm me-2" value="approve" name="action" style="font-size: 8pt"
+                                            type="submit">Odobri</button>
+                                    <button class="btn btn-secondary btn-sm" value="reject" name="action" style="font-size: 8pt"
+                                            type="submit">Odbij</button>
+                                </div>
+                            </form>
+                        </td>
+                    @else
+                        <td>{{ $vehicleRegistration->statusRegistracije }}</td>
+                        <td>{{ $vehicleRegistration->prijavljenaKradja }}</td>
+                        <td>{{ $vehicleRegistration->odobrioSluzbenik }}</td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
