@@ -15,7 +15,7 @@ class CreateDrivingLicensesTable extends Migration
     {
         Schema::create('vozackaDozvola', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->char('brojVozackeDozvole', 8);
+            $table->char('brojVozackeDozvole', 8)->unique();
             $table->string('katergorijeVozila');
             $table->date('datumIzdavanja')->nullable();
             $table->date('datumIsteka')->nullable();

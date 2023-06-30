@@ -14,14 +14,18 @@
                     <div class="form-group mb-2 mx-1">
                         @props(['drivingLicenseData'])
                         @php
-                            $categoriesArray = unserialize($drivingLicenseData->katergorijeVozila);
-                            $selectedValues = array_values($categoriesArray);
                             $categories = ['AM', 'A1', 'A2', 'A', 'B1', 'B', 'BE', 'C1', 'C1E', 'C', 'CE', 'D1',
                                 'D1E', 'D', 'DE', 'F', 'M'];
+                            $selectedValues = [];
+                            if(isset($drivingLicenseData->katergorijeVozila))  {
+                                $categoriesArray = unserialize($drivingLicenseData->katergorijeVozila);
+                                $selectedValues = array_values($categoriesArray);
+                            }
                         @endphp
 
-                        @if(is_null($drivingLicenseData) || !property_exists($drivingLicenseData, 'brojVozackeDozvole'))
-                            <p>Informacije o vozačkoj dozvoli nisu pronađene!</p>
+                        @if(is_null($drivingLicenseData) || !property_exists($drivingLicenseData, 'brojVozackeDozvole')
+                            || $drivingLicenseData->statusVozackeDozvole != "AKTIVNA")
+                            <p>Vozačku dozvolu nije moguće obnoviti!</p>
                         @else
                             <label for="categories">Kategorije vozila:</label>
                             <select class="form-select mt-2" id="categories"
@@ -31,11 +35,11 @@
                                         'selected' : '' }}>{{ $category }}</option>
                                 @endforeach
                             </select>
-                        @endif
-                    </div>
 
-                    <div class="d-flex flex-row-reverse mx-1">
-                        <button type="submit" class="btn text-white fs-5 px-5 mt-3 w-100" style="background-color: #EF5350;">Podnesi zahtev</button>
+                            <div class="d-flex flex-row-reverse mx-1">
+                                <button type="submit" class="btn text-white fs-5 px-5 mt-3 w-100" style="background-color: #EF5350;">Podnesi zahtev</button>
+                            </div>
+                        @endif
                     </div>
                 </form>
             </div>

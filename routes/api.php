@@ -28,6 +28,7 @@ Route::group(['prefix' => 'officials'], function () {
 Route::group(['prefix' => 'vehicles'], function () {
     Route::get('/', [VehicleController::class, 'index'])->name('index');
     Route::get('/{regBroj}', [VehicleController::class, 'findByVehicleRegNum'])->name('findByVehicleRegNum');
+    Route::post('/report', [VehicleController::class, 'reportVehicleTheft'])->name('reportVehicleTheft');
 });
 
 Route::group(['prefix' => 'driving_licenses'], function () {

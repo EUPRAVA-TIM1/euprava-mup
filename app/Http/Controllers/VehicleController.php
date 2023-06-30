@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -19,9 +20,6 @@ class VehicleController extends Controller
     {
         $token = session()->pull('token', '');
         $authController = new AuthController();
-        $officialController = new OfficialController();
-        $drivingLicenseController = new DrivingLicenseController();
-
         $isValidToken = $authController->validateToken($token);
 
         $user = session()->pull('user', '');
@@ -48,25 +46,11 @@ class VehicleController extends Controller
 
             $newVehicleRegistrationRequest->save();
 
-            //return view('index', ['isOfficial' => $officialController->isOfficial(),
-               // 'token' => $token, 'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
             return Redirect::back();
         } else {
             return view ('authorization_failed');
         }
     }
-
-    /*public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $token = session()->pull('token', '');
-        $authController = new AuthController();
-        $isValidToken = $authController->validateToken($token);
-        if ($isValidToken) {
-            return view('vehicle_registration_requests', ['vehicleRegistrationRequests' => Vehicle::all()]);
-        } else {
-            return view ('authorization_failed');
-        }
-    }*/
 
     public function getPendingVehicleRegistrationRequests():
     View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -157,5 +141,35 @@ class VehicleController extends Controller
         }
 
         return response()->json($vehicle);
+    }
+
+    public function reportVehicleTheft(Request $request): JsonResponse
+    {
+        $vehicle = Vehicle::where("regBroj", $request->regBroj)->first();
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vozilo nije pronadjeno!'], 404);
+        } else {
+
+            if($request->korisnik == $vehicle->korisnik) {
+                return response()->json(['error' => 'Nije moguce prijaviti vozilo!'], 403);
+            } else { //if already is reported, prevent it!
+
+                if(!isset($vehicle->prijavljenaKradja)) {
+                    $vehicle->prijavljenaKradja = Carbon::today()->setTime(
+                        Carbon::now()->hour,
+                        Carbon::now()->minute,
+                        Carbon::now()->second
+                    );
+
+                    $vehicle->save();
+                } else {
+                    return response()->json(['error' => 'Vozilo je vec prijavljeno!'], 403);
+                }
+
+            }
+
+            return response()->json(['message' => 'Vozilo je uspesno prijavljeno!']);
+        }
     }
 }

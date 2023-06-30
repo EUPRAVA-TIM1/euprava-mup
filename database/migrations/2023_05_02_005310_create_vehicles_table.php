@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('model');
             $table->integer('godina');
             $table->string('boja');
-            $table->string('regBroj');
+            $table->string('regBroj')->unique();
             $table->integer('snagaMotora');
             $table->integer('maksimalnaBrzina');
             $table->integer('brojSedista');

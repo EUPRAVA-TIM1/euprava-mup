@@ -78,7 +78,7 @@
                         </td>
                     @else
                         <td>{{ $vehicleRegistration->statusRegistracije }}</td>
-                        <td>{{ $vehicleRegistration->prijavljenaKradja }}</td>
+                        <td>{{ substr($vehicleRegistration->prijavljenaKradja, 0, 10) }}</td>
                         <td>{{ $vehicleRegistration->odobrioSluzbenik }}</td>
                     @endif
                 </tr>
