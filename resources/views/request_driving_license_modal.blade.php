@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" accept-charset="UTF-8" action="{{ route('driverLicenseRequest') }}">
+                <form method="post" accept-charset="UTF-8" action="{{ route('drivingLicenseRequest') }}">
                     @csrf <!-- {{ csrf_field() }} -->
 
                     <!-- Form fields -->

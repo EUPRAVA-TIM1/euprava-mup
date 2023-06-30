@@ -62,8 +62,12 @@
                         <h5 class="card-title fs-2">Zahtev za obnavljanje vozačke dozvole</h5>
                         <p class="card-text fs-5">Ovde možete podneti zahtev za obnavljanje postojeće
                             vozačke dozvole</p>
-                        <a href="#" class="btn btn-danger fs-5" style="background-color: #EF5350;">
-                            Podnesi zahtev za obnavljanje vozačke dozvole</a>
+                        <button data-bs-toggle="modal" data-bs-target="#renewDrivingLicenseModal"
+                                class="btn btn-danger fs-5" style="background-color: #EF5350;">
+                            Podnesi zahtev za obnavljanje vozačke dozvole</button>
+                        @component('renew_driving_license_modal', ['drivingLicenseData' =>
+                                    $drivingLicenseData->getData()])
+                        @endcomponent
                     </div>
                 </div>
             </div>

@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('/vehicleRegistrationRequest', [VehicleController::class, 'vehicleRegistrationRequest'])->
     name('vehicleRegistrationRequest');
 
-Route::post('/driverLicenseRequest', [DrivingLicenseController::class, 'driverLicenseRequest'])->
-    name('driverLicenseRequest');
+Route::post('/drivingLicenseRequest', [DrivingLicenseController::class, 'drivingLicenseRequest'])->
+    name('drivingLicenseRequest');
+
+Route::post('/renewDrivingLicenseRequest', [DrivingLicenseController::class, 'renewDrivingLicenseRequest'])->
+    name('renewDrivingLicenseRequest');
 
 Route::get('/getVehicleRegistrationRequests', [VehicleController::class, 'getPendingVehicleRegistrationRequests'])
     ->name('getPendingVehicleRegistrationRequests');

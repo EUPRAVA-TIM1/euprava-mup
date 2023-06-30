@@ -13,7 +13,7 @@
                 @else
                     <p><strong>Broj vozačke dozvole:</strong> {{ $drivingLicenseData->brojVozackeDozvole }}</p>
                     <p><strong>Kategorije vozila:</strong> {{ implode(', ', unserialize($drivingLicenseData->katergorijeVozila)) }}</p>
-                    <p><strong>Datum izdavanja:</strong> {{ $drivingLicenseData->datumIzdavanja ?: 'N/A' }}</p>
+                    <p><strong>Datum izdavanja (obnove):</strong> {{ $drivingLicenseData->datumIzdavanja ?: 'N/A' }}</p>
                     <p><strong>Datum isteka:</strong> {{ $drivingLicenseData->datumIsteka ?: 'N/A' }}</p>
                     <p><strong>Broj kaznenih poena:</strong> {{ $drivingLicenseData->brojKaznenihPoena }}</p>
                     <p><strong>Status vozačke dozvole:</strong> {{ $drivingLicenseData->statusVozackeDozvole }}</p>

@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class DrivingLicenseController extends Controller
 {
-    public function driverLicenseRequest(Request $request):
+    public function drivingLicenseRequest(Request $request):
     \Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
         $token = session()->pull('token', '');
@@ -52,6 +52,50 @@ class DrivingLicenseController extends Controller
         } else {
             return view ('authorization_failed');
         }
+    }
+
+    public function renewDrivingLicenseRequest(Request $request):
+    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $token = session()->pull('token', '');
+
+        $authController = new AuthController();
+        $officialController = new OfficialController();
+        $drivingLicenseController = new DrivingLicenseController();
+
+        $isValidToken = $authController->validateToken($token);
+        $user = session()->pull('user', '');
+
+        if ($isValidToken) {
+
+            if ($user && isset($user['jmbg'])) {
+
+                $drivingLicense = DrivingLicense::where("korisnik", $user['jmbg'])->first();
+
+                if($drivingLicense->statusVozackeDozvole == "ODUZETA" ||
+                    $drivingLicense->statusVozackeDozvole == "ODBIJENA") {
+
+                    return view('error');
+
+                } else {
+
+                    $drivingLicense->katergorijeVozila = serialize($request->categories);
+                    $drivingLicense->datumIzdavanja = Carbon::today();
+                    $drivingLicense->datumIsteka = Carbon::today()->addYears(10);
+                    $drivingLicense->save();
+
+                    return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
+                        'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+                }
+
+            } else {
+                return view('error');
+            }
+        } else {
+            return view ('authorization_failed');
+        }
+
+
     }
 
     public function index(): JsonResponse
@@ -123,7 +167,8 @@ class DrivingLicenseController extends Controller
         }
     }
 
-    public function removePenaltyPoints(Request $request, $jmbg){
+    public function removePenaltyPoints(Request $request, $jmbg): JsonResponse
+    {
 
         //TODO Add auth
 
