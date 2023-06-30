@@ -19,6 +19,13 @@
 </head>
 <body>
     <div class="container mt-5">
+        @if($isOfficial)
+            <a href="{{ route('official', ['token' => session('token')]) }}" class="btn btn-danger mb-3"
+               style="background-color: #EF5350;">Vrati se na početnu stranicu</a>
+        @else
+            <a href="{{ route('redirekcija', ['token' => session('token')]) }}" class="btn btn-danger mb-3"
+               style="background-color: #EF5350;">Vrati se na početnu stranicu</a>
+        @endif
         <table class="table table-striped">
             <thead>
             <tr>

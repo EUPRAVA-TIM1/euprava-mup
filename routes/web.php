@@ -33,7 +33,7 @@ Route::get('/redirekcija/{token}', function ($token) {
     } else {
         return view ('authorization_failed');
     }
-});
+})->name('redirekcija');
 
 Route::get('/official/{token}', function ($token) {
     $authController = new AuthController();
@@ -44,7 +44,7 @@ Route::get('/official/{token}', function ($token) {
     } else {
         return view ('authorization_failed');
     }
-});
+})->name('official');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 

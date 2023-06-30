@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DrivingLicense;
 use App\Models\Vehicle;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 class VehicleController extends Controller
 {
-    public function vehicleRegistrationRequest(Request $request):
-    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function vehicleRegistrationRequest(Request $request): View|RedirectResponse
     {
         $token = session()->pull('token', '');
         $authController = new AuthController();
@@ -48,8 +48,9 @@ class VehicleController extends Controller
 
             $newVehicleRegistrationRequest->save();
 
-            return view('index', ['isOfficial' => $officialController->isOfficial(),
-                'token' => $token, 'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+            //return view('index', ['isOfficial' => $officialController->isOfficial(),
+               // 'token' => $token, 'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+            return Redirect::back();
         } else {
             return view ('authorization_failed');
         }

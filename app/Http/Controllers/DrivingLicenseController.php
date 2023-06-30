@@ -7,19 +7,20 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class DrivingLicenseController extends Controller
 {
-    public function drivingLicenseRequest(Request $request):
-    \Illuminate\Contracts\Foundation\Application|Factory|View|Application
+    public function drivingLicenseRequest(Request $request): View|RedirectResponse
     {
         $token = session()->pull('token', '');
         $authController = new AuthController();
-        $officialController = new OfficialController();
-        $drivingLicenseController = new DrivingLicenseController();
+        //$officialController = new OfficialController();
+        //$drivingLicenseController = new DrivingLicenseController();
 
         $isValidToken = $authController->validateToken($token);
         $user = session()->pull('user', '');
@@ -43,8 +44,10 @@ class DrivingLicenseController extends Controller
 
                     $newDrivingLicenseRequest->save();
 
-                    return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
-                        'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+                    //return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
+                        //'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+
+                    return Redirect::back();
                 }
             } else {
                 return view('error');
@@ -54,8 +57,7 @@ class DrivingLicenseController extends Controller
         }
     }
 
-    public function renewDrivingLicenseRequest(Request $request):
-    View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function renewDrivingLicenseRequest(Request $request): View|RedirectResponse
     {
         $token = session()->pull('token', '');
 
@@ -72,6 +74,10 @@ class DrivingLicenseController extends Controller
 
                 $drivingLicense = DrivingLicense::where("korisnik", $user['jmbg'])->first();
 
+                if (!$drivingLicense) {
+                    return view('error');
+                }
+
                 if($drivingLicense->statusVozackeDozvole == "ODUZETA" ||
                     $drivingLicense->statusVozackeDozvole == "ODBIJENA") {
 
@@ -84,8 +90,10 @@ class DrivingLicenseController extends Controller
                     $drivingLicense->datumIsteka = Carbon::today()->addYears(10);
                     $drivingLicense->save();
 
-                    return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
-                        'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+                    //return view('index', ['isOfficial' => $officialController->isOfficial(), 'token' => $token,
+                       // 'drivingLicenseData' => $drivingLicenseController->findByUserId($user['jmbg'])]);
+
+                    return Redirect::back();
                 }
 
             } else {
@@ -94,8 +102,6 @@ class DrivingLicenseController extends Controller
         } else {
             return view ('authorization_failed');
         }
-
-
     }
 
     public function index(): JsonResponse
